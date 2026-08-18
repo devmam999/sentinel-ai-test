@@ -13,6 +13,14 @@ def test_get_existing_user():
     assert response.json()["username"] == "alice"
 
 
+def test_get_inactive_user():
+    response = client.get("/api/users/3")
+
+    assert response.status_code == 200
+    assert response.json()["username"] == "charlie"
+    assert response.json()["active"] is False
+
+
 def test_get_missing_user():
     response = client.get("/api/users/999")
 
