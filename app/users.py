@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from app.database import get_user_by_id
+from app.database import get_user_by_id, is_user_active
 from app.database import create_user as create_user_in_database
 
 class UserCreate(BaseModel):
@@ -21,6 +21,11 @@ def get_user(user_id: int):
             detail="User not found",
         )
 
+    if not is_user_active(user_id):
+        raise HTTPException(
+            status_code=403,
+            detail="User account is inactive"
+        )
     return user
 
 @router.post("")

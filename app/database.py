@@ -57,3 +57,22 @@ def create_user(username: str, email: str):
                 "email": row[2],
                 "active": row[3],
             }
+
+def is_user_active(user_id: int) -> bool:
+    with get_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT active
+                FROM users
+                WHERE id = %s
+                """,
+                (user_id,),
+            )
+
+            row = cursor.fetchone()
+
+            if row is None:
+                return False
+
+            return row[0]
