@@ -37,6 +37,30 @@ def get_user_by_id(user_id: int):
                 "active": row[3],
             }
 
+def get_user_by_username(username: str):
+    with get_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT id, username, email, active
+                FROM users
+                WHERE username = %s
+                """,
+                (username,),
+            )
+
+            row = cursor.fetchone()
+
+            if row is None:
+                return None
+
+            return {
+                "id": row[0],
+                "username": row[1],
+                "email": row[2],
+                "active": row[3],
+            }
+
 def create_user(username: str, email: str):
     with get_connection() as connection:
         with connection.cursor() as cursor:
