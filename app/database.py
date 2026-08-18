@@ -21,6 +21,7 @@ def get_user_by_id(user_id: int):
                 SELECT id, username, email, active
                 FROM users
                 WHERE id = %s
+                AND active = TRUE
                 """,
                 (user_id,),
             )
