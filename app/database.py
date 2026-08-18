@@ -36,3 +36,24 @@ def get_user_by_id(user_id: int):
                 "email": row[2],
                 "active": row[3],
             }
+
+def create_user(username: str, email: str):
+    with get_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                INSERT INTO users (username, email, active)
+                VALUES (%s, %s, TRUE)
+                RETURNING id, username, email, active
+                """,
+                (username, email),
+            )
+
+            row = cursor.fetchone()
+
+            return {
+                "id": row[0],
+                "username": row[1],
+                "email": row[2],
+                "active": row[3],
+            }
